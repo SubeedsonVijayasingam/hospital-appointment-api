@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Appointment {
+  appointmentId   Int      @id @default(autoincrement()) @map("appointment_id")
+  patientId       Int      @map("patient_id")
+  doctorId        Int      @map("doctor_id")
+  appointmentDate DateTime @map("appointment_date") @db.Timestamp(6)
+  status           String   @default("Scheduled") @db.VarChar(30)
+  notes            String?
+
+  Doctor  Doctor  @relation(fields: [doctorId], references: [doctorId], onDelete: NoAction, onUpdate: NoAction)
+  Patient Patient @relation(fields: [patientId], references: [patientId], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("appointments")
+}
+
+model Doctor {
+  doctorId    Int           @id @default(autoincrement()) @map("doctor_id")
+  firstName   String        @map("first_name") @db.VarChar(100)
+  lastName    String        @map("last_name") @db.VarChar(100)
+  specialty   String        @db.VarChar(100)
+  phone       String?       @db.VarChar(20)
+  email       String?       @unique @db.VarChar(150)
+  Appointments Appointment[]
+
+  @@map("doctors")
+}
+
+model Patient {
+  patientId    Int           @id @default(autoincrement()) @map("patient_id")
+  firstName    String        @map("first_name") @db.VarChar(100)
+  lastName     String        @map("last_name") @db.VarChar(100)
+  dateOfBirth  DateTime?     @map("date_of_birth") @db.Date
+  gender       String?       @db.VarChar(20)
+  phone        String?       @db.VarChar(20)
+  email        String?       @unique @db.VarChar(150)
+  Appointments Appointment[]
+
+  @@map("patients")
+}
