@@ -1,4 +1,4 @@
-import prisma from "./lib/prisma";
+import prisma from "./lib/prisma.js";
 
 interface AppointmentInput {
 patientId: number;
@@ -8,22 +8,22 @@ notes?: string;
 }
 
 export async function bookAppointment(data: AppointmentInput) {
-return await prisma.appointment.create({
-data: {
-appointmentDate: data.appointmentDate,
-notes: data.notes,
-Patient: {
-connect: { patientId: data.patientId },
-},
-Doctor: {
-connect: { doctorId: data.doctorId },
-},
-},
-include: {
-Patient: true,
-Doctor: true,
-},
-});
+	return await prisma.appointment.create({
+		data: {
+			appointmentDate: data.appointmentDate,
+			notes: data.notes ?? null,
+			Patient: {
+				connect: { patientId: data.patientId },
+			},
+			Doctor: {
+				connect: { doctorId: data.doctorId },
+			},
+		},
+		include: {
+			Patient: true,
+			Doctor: true,
+		},
+	});
 }
 
 export async function getAppointmentFull(appointmentId: number) {

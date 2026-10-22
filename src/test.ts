@@ -1,18 +1,17 @@
-
 import {
-createPatient,
-getPatient,
-searchPatients,
-updatePatientPhone,
-deletePatient,
-} from "./patients";
+	createPatient,
+	getPatient,
+	searchPatients,
+	updatePatientPhone,
+	deletePatient,
+} from "./patients.js";
 
 import {
 createDoctor,
 getDoctor,
 listDoctorsBySpecialty,
 deleteDoctor,
-} from "./doctors";
+} from "./doctors.js";
 
 import {
 bookAppointment,
@@ -21,7 +20,7 @@ getDoctorUpcomingAppointments,
 setAppointmentStatus,
 cancelAllPatientAppointments,
 deleteAppointment,
-} from "./appointments";
+} from "./appointments.js";
 
 async function main() {
 console.log("=== PATIENT TESTS ===");
@@ -32,9 +31,11 @@ lastName: "Patient",
 email: "[test.patient@example.com](mailto:test.patient@example.com)",
 phone: "9000000001",
 });
+
 console.log("Created patient:", patient);
 
 console.log("Get patient:", await getPatient(patient.patientId));
+
 console.log("Search patients:", await searchPatients("Test"));
 
 await updatePatientPhone(patient.patientId, "9000000002");
@@ -48,9 +49,11 @@ lastName: "Doctor",
 specialty: "Cardiology",
 email: "[test.doctor@example.com](mailto:test.doctor@example.com)",
 });
+
 console.log("Created doctor:", doctor);
 
 console.log("Get doctor:", await getDoctor(doctor.doctorId));
+
 console.log(
 "Doctors by specialty:",
 await listDoctorsBySpecialty("Cardiology"),
@@ -64,6 +67,7 @@ doctorId: doctor.doctorId,
 appointmentDate: new Date(Date.now() + 86400000),
 notes: "Test appointment",
 });
+
 console.log("Booked appointment:", appointment);
 
 console.log(
@@ -94,8 +98,7 @@ console.log("Deleted doctor.");
 console.log("All tests completed successfully.");
 }
 
-main()
-.catch((error: unknown) => {
+main().catch((error: unknown) => {
 console.error("Test failed:", error);
 process.exitCode = 1;
 });
