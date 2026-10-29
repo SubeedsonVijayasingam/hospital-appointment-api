@@ -1,101 +1,102 @@
+import {
+  createPatient,
+  getPatient,
+  searchPatients,
+  updatePatientPhone,
+  deletePatient,
+} from "./patients.js";
 
 import {
-createPatient,
-getPatient,
-searchPatients,
-updatePatientPhone,
-deletePatient,
-} from "./patients";
+  createDoctor,
+  getDoctor,
+  listDoctorsBySpecialty,
+  deleteDoctor,
+} from "./doctors.js";
 
 import {
-createDoctor,
-getDoctor,
-listDoctorsBySpecialty,
-deleteDoctor,
-} from "./doctors";
-
-import {
-bookAppointment,
-getAppointmentFull,
-getDoctorUpcomingAppointments,
-setAppointmentStatus,
-cancelAllPatientAppointments,
-deleteAppointment,
-} from "./appointments";
+  bookAppointment,
+  getAppointmentFull,
+  getDoctorUpcomingAppointments,
+  setAppointmentStatus,
+  cancelAllPatientAppointments,
+  deleteAppointment,
+} from "./appointments.js";
 
 async function main() {
-console.log("=== PATIENT TESTS ===");
+  console.log("=== PATIENT TESTS ===");
 
-const patient = await createPatient({
-firstName: "Test",
-lastName: "Patient",
-email: "[test.patient@example.com](mailto:test.patient@example.com)",
-phone: "9000000001",
-});
-console.log("Created patient:", patient);
+  const patient = await createPatient({
+    firstName: "Test",
+    lastName: "Patient",
+    email: "test.patient@example.com",
+    phone: "9000000001",
+  });
 
-console.log("Get patient:", await getPatient(patient.patientId));
-console.log("Search patients:", await searchPatients("Test"));
+  console.log("Created patient:", patient);
+  console.log("Get patient:", await getPatient(patient.patientId));
+  console.log("Search patients:", await searchPatients("Test"));
 
-await updatePatientPhone(patient.patientId, "9000000002");
-console.log("Updated patient phone.");
+  await updatePatientPhone(patient.patientId, "9000000002");
+  console.log("Updated patient phone.");
 
-console.log("=== DOCTOR TESTS ===");
+  console.log("=== DOCTOR TESTS ===");
 
-const doctor = await createDoctor({
-firstName: "Test",
-lastName: "Doctor",
-specialty: "Cardiology",
-email: "[test.doctor@example.com](mailto:test.doctor@example.com)",
-});
-console.log("Created doctor:", doctor);
+  const doctor = await createDoctor({
+    firstName: "Test",
+    lastName: "Doctor",
+    specialty: "Cardiology",
+    email: "test.doctor@example.com",
+  });
 
-console.log("Get doctor:", await getDoctor(doctor.doctorId));
-console.log(
-"Doctors by specialty:",
-await listDoctorsBySpecialty("Cardiology"),
-);
+  console.log("Created doctor:", doctor);
+  console.log("Get doctor:", await getDoctor(doctor.doctorId));
 
-console.log("=== APPOINTMENT TESTS ===");
+  console.log(
+    "Doctors by specialty:",
+    await listDoctorsBySpecialty("Cardiology"),
+  );
 
-const appointment = await bookAppointment({
-patientId: patient.patientId,
-doctorId: doctor.doctorId,
-appointmentDate: new Date(Date.now() + 86400000),
-notes: "Test appointment",
-});
-console.log("Booked appointment:", appointment);
+  console.log("=== APPOINTMENT TESTS ===");
 
-console.log(
-"Full appointment:",
-await getAppointmentFull(appointment.appointmentId),
-);
+  const appointment = await bookAppointment({
+    patientId: patient.patientId,
+    doctorId: doctor.doctorId,
+    appointmentDate: new Date(Date.now() + 86400000),
+    notes: "Test appointment",
+  });
 
-console.log(
-"Doctor upcoming appointments:",
-await getDoctorUpcomingAppointments(doctor.doctorId),
-);
+  console.log("Booked appointment:", appointment);
 
-await setAppointmentStatus(appointment.appointmentId, "Completed");
-console.log("Updated appointment status.");
+  console.log(
+    "Full appointment:",
+    await getAppointmentFull(appointment.appointmentId),
+  );
 
-await cancelAllPatientAppointments(patient.patientId);
-console.log("Cancelled remaining scheduled appointments.");
+  console.log(
+    "Doctor upcoming appointments:",
+    await getDoctorUpcomingAppointments(doctor.doctorId),
+  );
 
-await deleteAppointment(appointment.appointmentId);
-console.log("Deleted appointment.");
+  await setAppointmentStatus(appointment.appointmentId, "Completed");
+  console.log("Updated appointment status.");
 
-await deletePatient(patient.patientId);
-console.log("Deleted patient.");
+  await cancelAllPatientAppointments(patient.patientId);
+  console.log("Cancelled remaining scheduled appointments.");
 
-await deleteDoctor(doctor.doctorId);
-console.log("Deleted doctor.");
+  await deleteAppointment(appointment.appointmentId);
+  console.log("Deleted appointment.");
 
-console.log("All tests completed successfully.");
+  await deletePatient(patient.patientId);
+  console.log("Deleted patient.");
+
+  await deleteDoctor(doctor.doctorId);
+  console.log("Deleted doctor.");
+
+  console.log("All tests completed successfully.");
 }
 
 main()
-.catch((error: unknown) => {
-console.error("Test failed:", error);
-process.exitCode = 1;
-});
+  .catch((error: unknown) => {
+    console.error("Test failed:", error);
+    process.exitCode = 1;
+  });
